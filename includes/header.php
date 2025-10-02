@@ -18,3 +18,4 @@
             <a href="register-animal.php">Registrar Nuevo Animal</a>
         </nav>
     </header>
+    <main class="container">
