@@ -1,9 +1,10 @@
 <?php 
 $titulo_pagina = "Test";
-include "/workspaces/Practica1_archivos/includes/header.php";
+include "../includes/header.php";
 
-require "/workspaces/Practica1_archivos/data/datos.php";
+require "../data/datos.php";
 
+// Listar las categorías con enlaces
 echo "<ul>";
 foreach($categorias as $categoria){
     echo '<li>';
@@ -13,6 +14,6 @@ foreach($categorias as $categoria){
 
 echo "</ul>";
 
-include "/workspaces/Practica1_archivos/includes/footer.php";
+include "../includes/footer.php";
 
 ?>;

@@ -1,52 +1,54 @@
 <?php 
-$titulo_pagina = "Test";
+$titulo_pagina = "Animal";
+require_once "../includes/header.php";
+require_once "../data/datos.php";
 
-//Incluimos cabecera y datos
-require_once "/workspaces/Practica1_archivos/includes/header.php";
-require_once "/workspaces/Practica1_archivos/data/datos.php";
-
-
-//REcuperar el ID desde la URL
-if (isset($_GET['id'])){
-    $idAnimal = (int) $_GET['id'];
-}else{
-    echo "<p>Error: No se especificó ningun animal.</p>";
+// Recuperar el ID del animal desde la URL
+if (isset($_GET['id'])) {
+    $idAnimal = $_GET['id'];
+} else {
+    echo "<p style='color:red;'>Error: No se especificó ningún animal.</p>";
+    require_once "../includes/footer.php";
     exit;
 }
 
-//Buscamos el animal en el array
-$animalEncontrado = null;
-foreach($animales as $animal){
-    if($animal['categoria_id'] == $idAnimal){
-        $animalEncontrado = $animal;
-        break;
-    }
-}
-
-//Validamos que existe
-if(!$animalEncontrado){
-    echo '<p>Error: Animal no encontrada</p>';
+// Buscar el animal usando la clave directamente
+if (isset($animales[$idAnimal])) {
+    $animalEncontrado = $animales[$idAnimal];
+} else {
+    echo "<p style='color:red;'>Error: Animal no encontrado.</p>";
+    require_once "../includes/footer.php";
     exit;
 }
 
-//Mostrar info del animal
-echo '<h1>' . htmlspecialchars($animalEncontrado['nombre']) . '</h1>';
-echo '<p><strong>Hábitat:</strong>' . htmlspecialchars($animalEncontrado['habitat']) . '</p>';
+// Mostrar información del animal
+echo "<h1>" . htmlspecialchars($animalEncontrado['nombre']) . "</h1>";
+echo "<p><strong>Hábitat:</strong> " . htmlspecialchars($animalEncontrado['habitat']) . "</p>";
 
-echo "<img src='" . htmlspecialchars($animalEncontrado['imagen']) . "' alt='" . htmlspecialchars($animalEncontrado['nombre']) . "' width='300'>";
+// Imagen
+if (!empty($animalEncontrado['imagen']) && file_exists($animalEncontrado['imagen'])) {
+    echo "<img src='" . htmlspecialchars($animalEncontrado['imagen']) . "' alt='" . htmlspecialchars($animalEncontrado['nombre']) . "' width='300'>";
+} else {
+    echo "<p>No hay imagen disponible.</p>";
+}
 
-
-echo "<h2>Caracteríscticas:</h2>";
+// Características
+echo "<h2>Características:</h2>";
 echo "<ul>";
-
-foreach($animalEncontrado['caracteristicas'] as $caracteristica){
+foreach ($animalEncontrado['caracteristicas'] as $caracteristica) {
     echo "<li>" . htmlspecialchars($caracteristica) . "</li>";
 }
 echo "</ul>";
 
-echo "<p><a href='" . htmlspecialchars($animalEncontrado['pdf']) . "' target='_blank'>Ver descripcion en PDF</a></p>";
-echo "<p><a href='update-animal.php?id=" . htmlspecialchars($animalEncontrado['categoria_id']) . ">Actualizar este animal.</a></p>";
+// PDF
+if (!empty($animalEncontrado['pdf']) && file_exists($animalEncontrado['pdf'])) {
+    echo "<p><a href='" . htmlspecialchars($animalEncontrado['pdf']) . "' target='_blank'>Ver descripción en PDF</a></p>";
+} else {
+    echo "<p>No hay PDF disponible.</p>";
+}
 
-require_once "/workspaces/Practica1_archivos/includes/footer.php";
+// Enlace a update-animal.php
+echo "<p><a href='update-animal.php?id=" . htmlspecialchars($idAnimal) . "'>Actualizar este animal</a></p>";
 
-?>;
+require_once "../includes/footer.php";
+?>
